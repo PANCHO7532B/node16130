@@ -1,0 +1,22 @@
+# Based on C/C++ template by GitLab
+# Might or might not work we'll see
+image: gcc:latest
+
+stages:
+    - build
+
+build:
+  stage: build
+  variables:
+      DEBIAN_FRONTEND: "noninteractive"
+  before_script:
+      - apt update && apt upgrade -y
+      - apt install -y python3 g++ make cmake openssl libssl-dev pkg-config net-tools unzip zip
+  script:
+    - ./configure --debug
+    - make -j4 # It's obvious that these machines have only one core but idc, hopefully it will accelerate the build time
+  artifacts:
+        paths:
+            - out/Release/node
+            - out/Debug/node
+        expire_in: 1 week
