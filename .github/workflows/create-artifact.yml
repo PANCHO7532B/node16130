@@ -15,7 +15,7 @@ jobs:
         DEBIAN_FRONTEND: "noninteractive"
       run: sudo apt update && sudo apt upgrade -y && sudo apt install -y python3 g++ make cmake openssl libssl-dev pkg-config net-tools unzip zip git
     - name: Building...
-      run: ./configure --debug && make -j2
+      run: ./configure --debug --gdb && make -j4
     - name: Publish release artifact
       uses: actions/upload-artifact@v2
       with:
