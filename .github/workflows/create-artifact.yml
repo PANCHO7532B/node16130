@@ -1,0 +1,30 @@
+name: NodeArtifact-CI
+on:
+  workflow_dispatch:
+
+defaults:
+  run:
+    shell: bash
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Preparing environment...
+      env:
+        DEBIAN_FRONTEND: "noninteractive"
+      run: sudo apt update && sudo apt upgrade -y && sudo apt install -y python3 g++ make cmake openssl libssl-dev pkg-config net-tools unzip zip git
+    - name: Building...
+      run: ./configure --debug && make -j2
+    - name: Publish release artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: Release
+        path: out/Release/node
+        retention-days: 7
+    - name: Publish debug artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: Debug
+        path: out/Debug/node
+        retention-days: 7
